@@ -7,34 +7,34 @@ const webinarSchema = new mongoose.Schema(
       required: true,
       trim: true
     },
-
     description: {
       type: String,
       trim: true
     },
-
     date: {
       type: Date,
       required: true
     },
-
     speaker: {
       type: mongoose.Schema.Types.ObjectId,
-      ref: 'User', // Reference to the User model (speaker)
+      ref: 'User',
       required: true
     },
-
+    host: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: 'User',
+      required: true
+    },
     attendees: [
       {
         type: mongoose.Schema.Types.ObjectId,
-        ref: 'User' // Users who joined/registered
+        ref: 'User'
       }
     ],
-
     feedbacks: [
       {
         type: mongoose.Schema.Types.ObjectId,
-        ref: 'Feedback' // Optional reference to feedback documents
+        ref: 'Feedback'
       }
     ]
   },

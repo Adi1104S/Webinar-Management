@@ -1,0 +1,27 @@
+import express from "express";
+import mongoose from "mongoose";
+import dotenv from "dotenv";
+import registrationRoutes from "./routes/registration.routes.js";
+    
+const app = express();
+
+app.use(express.json());
+
+mongoose.connect(process.env.MONGO_URL, {
+  useNewUrlParser: true,
+  useUnifiedTopology: true
+})
+.then(() => console.log("MongoDB connected"))
+.catch((err) => console.error("MongoDB connection error:", err));
+
+app.use("/api/registrations", registrationRoutes);
+
+app.get("/",(req,res)=>{
+    res.send("Webinar Management is running");
+})
+
+const PORT = process.env.PORT || 3000;
+app.listen(PORT,()=>{
+   console.log(`Server is running on http://localhost:${PORT}`);
+})
+

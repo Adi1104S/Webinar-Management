@@ -7,6 +7,7 @@ dotenv.config();
 const app = express();
 
 app.use(express.json());
+app.use(express.urlencoded({ extended: true }));
 
 mongoose.connect(process.env.MONGO_URL, {
   useNewUrlParser: true,
@@ -15,7 +16,7 @@ mongoose.connect(process.env.MONGO_URL, {
 .then(() => console.log("MongoDB connected"))
 .catch((err) => console.error("MongoDB connection error:", err));
 
-app.use("/api/registrations", registrationRoutes);
+app.use("/api/registration", registrationRoutes);
 
 app.get("/",(req,res)=>{
     res.send("Webinar Management is running");

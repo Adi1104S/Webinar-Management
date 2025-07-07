@@ -1,7 +1,7 @@
 import express from "express";
 import mongoose from "mongoose";
 import dotenv from "dotenv";
-import registrationRoutes from "./routes/registration.routes.js";
+import registrationRoutes from "./routes/user.registration.routes.js";
 
 dotenv.config();
 const app = express();

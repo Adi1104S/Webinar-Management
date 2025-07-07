@@ -2,6 +2,7 @@ import express from "express";
 import mongoose from "mongoose";
 import dotenv from "dotenv";
 import registrationRoutes from "./routes/user.registration.routes.js";
+import loginRoutes from "./routes/login.routes.js";
 
 dotenv.config();
 const app = express();
@@ -17,7 +18,7 @@ mongoose.connect(process.env.MONGO_URL, {
 .catch((err) => console.error("MongoDB connection error:", err));
 
 app.use("/api/registration", registrationRoutes);
-
+app.use("/api/login",loginRoutes);
 app.get("/",(req,res)=>{
     res.send("Webinar Management is running");
 })

@@ -3,6 +3,7 @@ import mongoose from "mongoose";
 import dotenv from "dotenv";
 import registrationRoutes from "./routes/user.registration.routes.js";
 import loginRoutes from "./routes/login.routes.js";
+import webinarRoutes from "./routes/webinar.routes.js";
 
 dotenv.config();
 const app = express();
@@ -19,6 +20,7 @@ mongoose.connect(process.env.MONGO_URL, {
 
 app.use("/api/registration", registrationRoutes);
 app.use("/api/login",loginRoutes);
+app.use("/api/webinar",webinarRoutes);
 app.get("/",(req,res)=>{
     res.send("Webinar Management is running");
 })

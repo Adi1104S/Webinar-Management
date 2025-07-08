@@ -16,9 +16,20 @@ const webinarSchema = new mongoose.Schema(
       required: true
     },
     speaker: {
-      type: mongoose.Schema.Types.ObjectId,
-      ref: 'User',
-      required: true
+      name: {
+        type: String,
+        required: true,
+        trim: true
+      },
+      email: {
+        type: String,
+        required: true,
+        trim: true
+      },
+      bio: {
+        type: String,
+        trim: true
+      }
     },
     host: {
       type: mongoose.Schema.Types.ObjectId,

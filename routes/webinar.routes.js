@@ -58,4 +58,99 @@ router.post('/', async (req, res) => {
   }
 });
 
+router.delete('/:id', async (req, res) => {
+  try {
+    const { id } = req.params;
+    const { host } = req.body;
+
+    const webinar = await Webinar.findById(id);
+    if (!webinar) {
+      return res.status(404).json({ message: "Webinar not found" });
+    }
+
+    if (webinar.host.toString() !== host) {
+      return res.status(403).json({ message: "Not authorized to delete this webinar" });
+    }
+
+    await webinar.deleteOne();
+
+    res.status(200).json({ message: "Webinar deleted successfully" });
+
+  } catch (error) {
+    console.error("Webinar deletion error:", error);
+    res.status(500).json({ message: "Internal server error" });
+  }
+});
+
+router.put('/:id', async (req, res) => {
+  try {
+    const { id } = req.params;
+    const { title, description, date, speaker, host } = req.body;
+
+    const webinar = await Webinar.findById(id);
+    if (!webinar) {
+      return res.status(404).json({ message: "Webinar not found" });
+    }
+
+    if (webinar.host.toString() !== host) {
+      return res.status(403).json({ message: "Not authorized to update this webinar" });
+    }
+
+    if (title) webinar.title = title;
+    if (description) webinar.description = description;
+    if (date) {
+      if (isNaN(Date.parse(date))) {
+        return res.status(400).json({ message: "Invalid date format" });
+      }
+      webinar.date = date;
+    }
+    if (speaker) {
+      if (typeof speaker !== 'object' || !speaker.name || !speaker.email) {
+        return res.status(400).json({ message: "Invalid speaker format" });
+      }
+      const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+      if (!emailRegex.test(speaker.email)) {
+        return res.status(400).json({ message: "Invalid speaker email format" });
+      }
+      webinar.speaker = speaker;
+    }
+
+    await webinar.save();
+    res.status(200).json({ message: "Webinar updated successfully", webinar });
+
+  } catch (error) {
+    console.error("Webinar update error:", error);
+    res.status(500).json({ message: "Internal server error" });
+  }
+});
+
+router.post('/:id/register', async (req, res) => {
+  try {
+    const { id } = req.params;
+    const { userId } = req.body;
+
+    const webinar = await Webinar.findById(id);
+    if (!webinar) {
+      return res.status(404).json({ message: "Webinar not found" });
+    }
+
+    const user = await User.findById(userId);
+    if (!user || user.role !== 'user') {
+      return res.status(403).json({ message: "Only regular users can register for webinars" });
+    }
+
+    if (webinar.attendees.includes(userId)) {
+      return res.status(400).json({ message: "User already registered for this webinar" });
+    }
+
+    webinar.attendees.push(userId);
+    await webinar.save();
+
+    res.status(200).json({ message: "Registration successful", webinar });
+  } catch (error) {
+    console.error("Registration error:", error);
+    res.status(500).json({ message: "Internal server error" });
+  }
+});
+
 export default router;

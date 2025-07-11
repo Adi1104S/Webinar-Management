@@ -18,9 +18,9 @@ mongoose.connect(process.env.MONGO_URL, {
 .then(() => console.log("MongoDB connected"))
 .catch((err) => console.error("MongoDB connection error:", err));
 
-app.use("/api/registration", registrationRoutes);
-app.use("/api/login",loginRoutes);
-app.use("/api/webinar",webinarRoutes);
+app.use("/registration", registrationRoutes);
+app.use("/login",loginRoutes);
+app.use("/webinar",webinarRoutes);
 app.get("/",(req,res)=>{
     res.send("Webinar Management is running");
 })

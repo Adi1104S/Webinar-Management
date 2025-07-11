@@ -181,9 +181,18 @@ router.get('/host/:userId', async (req, res) => {
 // GET /webinars - list all webinars
 router.get('/', async (req, res) => {
   try {
-    const webinars = await Webinar.find()
+    let webinars = await Webinar.find()
       .populate('host', 'name email')
-      .populate('attendees', 'name email');
+      .populate('attendees', 'name email')
+      .lean();
+
+    webinars = webinars.map(webinar => {
+      delete webinar.__v;
+      delete webinar.updatedAt;
+      return webinar;
+    });
+
+    webinars.sort((a, b) => new Date(a.date) - new Date(b.date));
 
     res.status(200).json({ webinars });
   } catch (error) {

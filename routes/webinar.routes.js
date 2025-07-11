@@ -3,7 +3,7 @@ import Webinar from "../models/webinar.js";
 import User from "../models/user.js";
 
 const router = express.Router();
-
+// creating webinar
 router.post('/', async (req, res) => {
   try {
     const { title, description, date, speaker, host } = req.body;
@@ -57,7 +57,7 @@ router.post('/', async (req, res) => {
     res.status(500).json({ message: "Internal server error" });
   }
 });
-
+//  deleting the webinar
 router.delete('/:id', async (req, res) => {
   try {
     const { id } = req.params;
@@ -81,7 +81,7 @@ router.delete('/:id', async (req, res) => {
     res.status(500).json({ message: "Internal server error" });
   }
 });
-
+// updating the webinar details
 router.put('/:id', async (req, res) => {
   try {
     const { id } = req.params;
@@ -123,7 +123,7 @@ router.put('/:id', async (req, res) => {
     res.status(500).json({ message: "Internal server error" });
   }
 });
-
+// registering user to particular webinar
 router.post('/:id/register', async (req, res) => {
   try {
     const { id } = req.params;
@@ -149,6 +149,32 @@ router.post('/:id/register', async (req, res) => {
     res.status(200).json({ message: "Registration successful", webinar });
   } catch (error) {
     console.error("Registration error:", error);
+    res.status(500).json({ message: "Internal server error" });
+  }
+});
+// fetching webinar by userid
+router.get('/attendee/:userId', async (req, res) => {
+  try {
+    const { userId } = req.params;
+
+    const webinars = await Webinar.find({ attendees: userId }).populate('host', 'name email');
+
+    res.status(200).json({ webinars });
+  } catch (error) {
+    console.error("Fetch attendee webinars error:", error);
+    res.status(500).json({ message: "Internal server error" });
+  }
+});
+// fetching webinar by hostid
+router.get('/host/:userId', async (req, res) => {
+  try {
+    const { userId } = req.params;
+
+    const webinars = await Webinar.find({ host: userId }).populate('host', 'name email');
+
+    res.status(200).json({ webinars });
+  } catch (error) {
+    console.error("Fetch host webinars error:", error);
     res.status(500).json({ message: "Internal server error" });
   }
 });

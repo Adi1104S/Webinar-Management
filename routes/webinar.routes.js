@@ -178,5 +178,18 @@ router.get('/host/:userId', async (req, res) => {
     res.status(500).json({ message: "Internal server error" });
   }
 });
+// GET /webinars - list all webinars
+router.get('/', async (req, res) => {
+  try {
+    const webinars = await Webinar.find()
+      .populate('host', 'name email')
+      .populate('attendees', 'name email');
+
+    res.status(200).json({ webinars });
+  } catch (error) {
+    console.error("Fetch webinars error:", error);
+    res.status(500).json({ message: "Internal server error" });
+  }
+});
 
 export default router;

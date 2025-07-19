@@ -1,7 +1,7 @@
 import { useState } from "react";
 
 const Signup = ({ onSubmit }) => {
-  const [formData, setFormData] = useState({ name: "", email: "", password: "" });
+  const [formData, setFormData] = useState({ name: "", email: "", password: "", role: "user" });
 
   const handleChange = (e) => {
     setFormData((prev) => ({ ...prev, [e.target.name]: e.target.value }));
@@ -50,3 +50,4 @@ const Signup = ({ onSubmit }) => {
 };
 
 export default Signup;
+

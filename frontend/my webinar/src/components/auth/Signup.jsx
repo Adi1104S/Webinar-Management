@@ -61,6 +61,7 @@ const Signup = ({ onSubmit }) => {
         <option value="" disabled>Select role</option>
         <option value="user">User</option>
         <option value="host">Host</option>
+        <option value="admin">Admin</option>
       </select>
 
       <button type="submit" className="w-full bg-green-600 text-white py-2 rounded">

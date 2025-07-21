@@ -17,8 +17,17 @@ const LoginPage = () => {
       if (res.ok) {
         localStorage.setItem("token", result.token);
         localStorage.setItem("user", JSON.stringify(result.user));
+        // console.log(JSON.stringify(result.user.role))
         toast.success("Login successful");
-        navigate("/");
+        if(result.user.role=='user'){
+          navigate("/");
+        }
+        else if(result.user.role=='admin'){
+          navigate("admin-dashboard");
+        }
+        else{
+          navigate("host-dashboard");
+        }
       } else {
         toast.error(result.message);
       }

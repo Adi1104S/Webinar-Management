@@ -1,6 +1,7 @@
 import { Routes, Route } from "react-router-dom";
 import AdminSidebar from "../components/AdminSidebar.jsx";
 import RegisterHost from "./RegisterHost"; 
+import ManageUsers from "./ManageUsers.jsx";
 
 const AdminDashboard = () => {
   return (
@@ -22,6 +23,7 @@ const AdminDashboard = () => {
             }
           />
           <Route path="register-host" element={<RegisterHost />} />
+          <Route path="manage-users" element={<ManageUsers />} />
         </Routes>
       </main>
     </div>

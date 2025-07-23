@@ -5,7 +5,7 @@ const Signup = ({ onSubmit }) => {
     name: "",
     email: "",
     password: "",
-    role: "", // no default
+    role: "user",
   });
 
   const handleChange = (e) => {
@@ -50,19 +50,6 @@ const Signup = ({ onSubmit }) => {
         value={formData.password}
         required
       />
-
-      <select
-        name="role"
-        value={formData.role}
-        onChange={handleChange}
-        className="w-full p-2 border rounded"
-        required
-      >
-        <option value="" disabled>Select role</option>
-        <option value="user">User</option>
-        <option value="host">Host</option>
-        <option value="admin">Admin</option>
-      </select>
 
       <button type="submit" className="w-full bg-green-600 text-white py-2 rounded">
         Signup

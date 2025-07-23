@@ -23,10 +23,10 @@ const LoginPage = () => {
           navigate("/");
         }
         else if(result.user.role=='admin'){
-          navigate("admin-dashboard");
+          navigate("/admin-dashboard");
         }
         else{
-          navigate("host-dashboard");
+          navigate("/host-dashboard");
         }
       } else {
         toast.error(result.message);

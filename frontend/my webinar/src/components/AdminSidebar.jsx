@@ -1,12 +1,9 @@
-import { Home, Users, BarChart2, Settings } from "lucide-react";
+import { Users } from "lucide-react";
 import { NavLink } from "react-router-dom";
 
 const AdminSidebar = () => {
   const navItems = [
-    { name: "Home", icon: <Home />, path: "/admin-dashboard" },
-    { name: "Users", icon: <Users />, path: "/admin-dashboard/users" },
-    { name: "Analytics", icon: <BarChart2 />, path: "/admin-dashboard/analytics" },
-    { name: "Settings", icon: <Settings />, path: "/admin-dashboard/settings" },
+    { name: "Register Host", icon: <Users />, path: "/admin-dashboard/register-host" },
   ];
 
   return (

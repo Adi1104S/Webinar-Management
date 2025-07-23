@@ -1,7 +1,7 @@
 import { useState } from "react";
 import axios from "axios";
 import toast from "react-hot-toast";
-import AdminSidebar from "../components/AdminSidebar";
+// import AdminSidebar from "../components/AdminSidebar";
 
 const RegisterHost = () => {
   const [formData, setFormData] = useState({
@@ -39,7 +39,7 @@ const RegisterHost = () => {
 
   return (
     <div className="flex">
-      <AdminSidebar />
+      {/* <AdminSidebar /> */}
       <main className="flex-1 bg-gray-100 min-h-screen p-8">
         <h1 className="text-3xl font-semibold mb-6">Register New Host</h1>
         <form

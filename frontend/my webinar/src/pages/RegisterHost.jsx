@@ -22,7 +22,7 @@ const RegisterHost = () => {
     try {
       const token = localStorage.getItem("token");
       const res = await axios.post(
-        "http://localhost:5000/api/admin/register-host",
+        "http://localhost:5000/registration",
         formData,
         {
           headers: {
@@ -31,7 +31,7 @@ const RegisterHost = () => {
         }
       );
       toast.success("Host registered successfully!");
-      setFormData({ name: "", email: "", password: "" });
+      setFormData({ name: "", email: "", password: "",role:"host" });
     } catch (err) {
       toast.error(err.response?.data?.message || "Registration failed");
     }

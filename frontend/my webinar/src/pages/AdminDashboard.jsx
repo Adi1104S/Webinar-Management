@@ -1,6 +1,6 @@
 import { Routes, Route } from "react-router-dom";
-import AdminSidebar from "../components/AdminSidebar";
-import RegisterHost from "./RegisterHost";
+import AdminSidebar from "../components/AdminSidebar.jsx";
+import RegisterHost from "./RegisterHost"; 
 
 const AdminDashboard = () => {
   return (
@@ -14,8 +14,8 @@ const AdminDashboard = () => {
               <>
                 <h1 className="text-3xl font-semibold mb-6">Welcome, Admin</h1>
                 <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-                  <DashboardCard title="Hosts" value="12" />
-                  <DashboardCard title="Total Users" value="1,250" />
+                  <DashboardCard title="Users" value="1,250" />
+                  <DashboardCard title="Revenue" value="$9,530" />
                   <DashboardCard title="Sessions" value="3,870" />
                 </div>
               </>

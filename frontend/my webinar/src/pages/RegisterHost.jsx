@@ -8,6 +8,7 @@ const RegisterHost = () => {
     name: "",
     email: "",
     password: "",
+    role:"host"
   });
 
   const handleChange = (e) => {

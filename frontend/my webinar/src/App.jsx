@@ -3,20 +3,30 @@ import LoginPage from "./pages/LoginPage";
 import SignupPage from "./pages/SignupPage";
 import HostLoginPage from "./pages/HostLoginPage";
 import AdminDashboard from "./pages/AdminDashboard";
-import ProtectedRoute from "./components/ProtectedRoute";
 import HostDashboard from "./pages/HostDashboard";
 import CreateWebinar from "./pages/CreateWebinar";
 import HostWebinars from "./pages/HostWebinar";
+import HomePage from "./pages/HomePage";
+import ProtectedRoute from "./components/ProtectedRoute";
+import UpcomingWebinars from "./pages/UpcomingWebinars";
+import OngoingWebinars from "./pages/OngoingWebinars";
 import { Toaster } from "react-hot-toast";
 
 function App() {
   return (
     <Router>
       <Routes>
+        {/* Public Routes */}
+        <Route path="/" element={<HomePage />} />
         <Route path="/login" element={<LoginPage />} />
         <Route path="/signup" element={<SignupPage />} />
         <Route path="/host-login" element={<HostLoginPage />} />
 
+        {/* Webinar View Pages (User) */}
+        <Route path="/user/upcoming-webinars" element={<UpcomingWebinars />} />
+        <Route path="/user/ongoing-webinars" element={<OngoingWebinars />} />
+
+        {/* Admin Dashboard - Protected */}
         <Route
           path="/admin-dashboard/*"
           element={
@@ -26,28 +36,22 @@ function App() {
             />
           }
         />
+
+        {/* Host Dashboard - Protected */}
         <Route
-          path="/host-dashboard"
+          path="/host-dashboard/*"
           element={
             <ProtectedRoute
-              allowedRoles={["host"]}
               element={<HostDashboard />}
+              allowedRoles={["host"]}
             />
           }
         >
-          {/* Nested route under /host-dashboard */}
           <Route path="create-webinar" element={<CreateWebinar />} />
-          <Route
-            path="/host-dashboard/host-webinars"
-            element={
-              <ProtectedRoute
-                element={<HostWebinars />}
-                allowedRoles={["host"]}
-              />
-            }
-          />
+          <Route path="host-webinars" element={<HostWebinars />} />
         </Route>
       </Routes>
+
       <Toaster position="top-center" />
     </Router>
   );

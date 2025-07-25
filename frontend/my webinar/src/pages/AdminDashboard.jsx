@@ -2,6 +2,7 @@ import { Routes, Route } from "react-router-dom";
 import AdminSidebar from "../components/AdminSidebar.jsx";
 import RegisterHost from "./RegisterHost"; 
 import ManageUsers from "./ManageUsers.jsx";
+import AllWebinars from "./AllWebinars.jsx";
 
 const AdminDashboard = () => {
   return (

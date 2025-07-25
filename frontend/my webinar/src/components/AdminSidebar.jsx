@@ -1,10 +1,23 @@
-import { Users } from "lucide-react";
+import { Users, Video } from "lucide-react";
 import { NavLink } from "react-router-dom";
 
 const AdminSidebar = () => {
   const navItems = [
-    { name: "Register Host", icon: <Users />, path: "/admin-dashboard/register-host" },
-    { name: "Manage Users", icon: <Users />, path: "/admin-dashboard/manage-users" },
+    {
+      name: "Register Host",
+      icon: <Users />,
+      path: "/admin-dashboard/register-host",
+    },
+    {
+      name: "Manage Users",
+      icon: <Users />,
+      path: "/admin-dashboard/manage-users",
+    },
+    {
+      name: "All Webinars",
+      icon: <Video />,
+      path: "/admin-dashboard/webinars",
+    },
   ];
 
   return (

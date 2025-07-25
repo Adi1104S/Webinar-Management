@@ -25,6 +25,7 @@ const AdminDashboard = () => {
           />
           <Route path="register-host" element={<RegisterHost />} />
           <Route path="manage-users" element={<ManageUsers />} />
+          <Route path="webinars" element={<AllWebinars/>}/>
         </Routes>
       </main>
     </div>

@@ -9,7 +9,7 @@ const AllWebinars = () => {
   useEffect(() => {
     const fetchWebinars = async () => {
       try {
-        const res = await axios.get("http://localhost:5000/webinar/all");
+        const res = await axios.get("http://localhost:5000/webinar");
         setWebinars(res.data.webinars || []);
       } catch (err) {
         toast.error("Failed to fetch webinars");
@@ -42,7 +42,7 @@ const AllWebinars = () => {
                 Speaker: {webinar.speaker?.name} ({webinar.speaker?.email})
               </p>
               <p className="text-sm text-gray-500">
-                Host ID: {webinar.host}
+                Host: {webinar.host?.name} ({webinar.host?.email})
               </p>
             </div>
           ))}

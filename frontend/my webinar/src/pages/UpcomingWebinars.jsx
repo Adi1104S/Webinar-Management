@@ -1,11 +1,14 @@
 import { useEffect, useState } from "react";
 import axios from "axios";
 import { motion } from "framer-motion";
+import RegisterForm from "../components/RegisterForm"; // Add this
+import toast, { Toaster } from "react-hot-toast";
 import Navbar from "../components/Navbar";
 
 const UpcomingWebinars = () => {
   const [webinars, setWebinars] = useState([]);
   const [loading, setLoading] = useState(true);
+  const [selectedWebinar, setSelectedWebinar] = useState(null); // for modal
 
   useEffect(() => {
     const fetchWebinars = async () => {
@@ -28,6 +31,7 @@ const UpcomingWebinars = () => {
 
   return (
     <div className="min-h-screen bg-gray-100 p-6">
+      <Toaster />
       <h1 className="text-3xl font-bold mb-6 text-center text-indigo-700">
         Upcoming Webinars
       </h1>
@@ -44,7 +48,7 @@ const UpcomingWebinars = () => {
               initial={{ opacity: 0, y: 30 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.4 }}
-              className="bg-white rounded-lg p-5 shadow hover:shadow-lg"
+              className="bg-white rounded-lg p-5 shadow hover:shadow-lg relative"
             >
               <h2 className="text-xl font-semibold">{webinar.title}</h2>
               <p className="text-gray-600 mt-1">{webinar.description}</p>
@@ -54,9 +58,23 @@ const UpcomingWebinars = () => {
               <p className="text-sm text-gray-500">
                 Speaker: {webinar.speaker?.name}
               </p>
+
+              <button
+                className="mt-4 bg-indigo-600 text-white px-4 py-2 rounded hover:bg-indigo-700"
+                onClick={() => setSelectedWebinar(webinar._id)}
+              >
+                Register
+              </button>
             </motion.div>
           ))}
         </div>
+      )}
+
+      {selectedWebinar && (
+        <RegisterForm
+          webinarId={selectedWebinar}
+          close={() => setSelectedWebinar(null)}
+        />
       )}
     </div>
   );

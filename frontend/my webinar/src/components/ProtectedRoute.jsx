@@ -5,10 +5,7 @@ const ProtectedRoute = ({ element, allowedRoles }) => {
   const user = JSON.parse(localStorage.getItem("user"));
 
   if (!token || !user) return <Navigate to="/login" />;
-
-  if (!allowedRoles.includes(user.role)) {
-    return <Navigate to="/" />;
-  }
+  if (!allowedRoles.includes(user.role)) return <Navigate to="/" />;
 
   return element;
 };

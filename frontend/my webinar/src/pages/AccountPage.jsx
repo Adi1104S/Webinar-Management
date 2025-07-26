@@ -1,67 +1,58 @@
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { LogOut, UserCircle2, Mail, ShieldCheck, Home } from "lucide-react";
 
 const AccountPage = () => {
-  const [user, setUser] = useState(null);
   const navigate = useNavigate();
+  const [user, setUser] = useState(null);
 
   useEffect(() => {
-    const storedUser = localStorage.getItem("user");
-    if (storedUser) {
-      setUser(JSON.parse(storedUser));
+    const userData = JSON.parse(localStorage.getItem("user"));
+    if (userData) {
+      setUser(userData);
     } else {
       navigate("/login");
     }
   }, [navigate]);
 
   const handleLogout = () => {
-    localStorage.removeItem("user");
     localStorage.removeItem("token");
+    localStorage.removeItem("user");
     navigate("/login");
   };
 
-  const handleGoHome = () => {
+  const goHome = () => {
     navigate("/");
   };
 
   if (!user) return null;
 
+  const capitalize = (str) => str.charAt(0).toUpperCase() + str.slice(1);
+
   return (
-    <div className="min-h-screen bg-gradient-to-r from-indigo-100 via-white to-cyan-100 flex items-center justify-center px-4">
-      <div className="bg-white shadow-xl rounded-2xl p-8 w-full max-w-md transition-all duration-300 hover:shadow-blue-300">
-        <div className="flex flex-col items-center space-y-4">
-          <UserCircle2 size={72} className="text-indigo-500" />
-          <h2 className="text-2xl font-bold text-gray-800">{user.name}</h2>
+    <div className="min-h-screen flex items-center justify-center bg-gradient-to-r from-sky-100 to-blue-200">
+      <div className="bg-white p-8 rounded-2xl shadow-xl w-[370px] text-center">
+        <h1 className="text-2xl font-bold mb-4 text-blue-700">
+          Welcome, {capitalize(user.role)}
+        </h1>
 
-          <div className="w-full">
-            <div className="flex items-center text-gray-600 mb-3">
-              <Mail className="mr-2 text-indigo-500" />
-              <span className="font-medium">{user.email}</span>
-            </div>
-            <div className="flex items-center text-gray-600 mb-6">
-              <ShieldCheck className="mr-2 text-green-500" />
-              <span className="capitalize font-medium">{user.role}</span>
-            </div>
-          </div>
-
-          <div className="flex space-x-4 w-full">
-            <button
-              onClick={handleGoHome}
-              className="flex-1 bg-blue-500 text-white px-4 py-2 rounded-full shadow hover:bg-blue-600 transition text-sm flex items-center justify-center"
-            >
-              <Home size={18} className="mr-2" />
-              Go to Home
-            </button>
-            <button
-              onClick={handleLogout}
-              className="flex-1 bg-red-500 text-white px-4 py-2 rounded-full shadow hover:bg-red-600 transition text-sm flex items-center justify-center"
-            >
-              <LogOut size={18} className="mr-2" />
-              Logout
-            </button>
-          </div>
+        <div className="text-left mb-6 text-gray-700 space-y-2">
+          <p><strong>Email:</strong> {user.email || "N/A"}</p>
+          <p><strong>Role:</strong> {capitalize(user.role)}</p>
         </div>
+
+        <button
+          onClick={goHome}
+          className="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-xl w-full mb-3"
+        >
+          Go to Home
+        </button>
+
+        <button
+          onClick={handleLogout}
+          className="bg-red-500 hover:bg-red-600 text-white px-4 py-2 rounded-xl w-full"
+        >
+          Logout
+        </button>
       </div>
     </div>
   );

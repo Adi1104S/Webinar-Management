@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import toast from "react-hot-toast";
 
 const RegisterForm = ({ webinarId, close }) => {
@@ -8,17 +8,35 @@ const RegisterForm = ({ webinarId, close }) => {
     phone: "",
   });
 
+  const [userId, setUserId] = useState("");
+
+  useEffect(() => {
+    // Get userId from localStorage
+    const user = JSON.parse(localStorage.getItem("user"));
+    if (user && user._id) {
+      setUserId(user._id);
+    } else {
+      toast.error("User not logged in");
+      close();
+    }
+  }, []);
+
   const handleChange = (e) => {
     setFormData((prev) => ({ ...prev, [e.target.name]: e.target.value }));
   };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+
     try {
-      const res = await fetch("http://localhost:5000/api/webinar/register", {
+      const res = await fetch("http://localhost:5000/webinar/register", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ ...formData, webinarId }),
+        body: JSON.stringify({
+          ...formData,
+          webinarId,
+          userId,
+        }),
       });
 
       const data = await res.json();

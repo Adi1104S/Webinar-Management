@@ -10,6 +10,7 @@ import HomePage from "./pages/HomePage";
 import ProtectedRoute from "./components/ProtectedRoute";
 import UpcomingWebinars from "./pages/UpcomingWebinars";
 import OngoingWebinars from "./pages/OngoingWebinars";
+import AccountPage from "./pages/AccountPage"; // ✅ Import your Account Page
 import { Toaster } from "react-hot-toast";
 
 function App() {
@@ -26,7 +27,18 @@ function App() {
         <Route path="/user/upcoming-webinars" element={<UpcomingWebinars />} />
         <Route path="/user/ongoing-webinars" element={<OngoingWebinars />} />
 
-        {/* Admin Dashboard - Protected */}
+        {/* User Account Page (Protected) */}
+        <Route
+          path="/account"
+          element={
+            <ProtectedRoute
+              element={<AccountPage />}
+              allowedRoles={["user"]}
+            />
+          }
+        />
+
+        {/* Admin Dashboard */}
         <Route
           path="/admin-dashboard/*"
           element={
@@ -37,7 +49,7 @@ function App() {
           }
         />
 
-        {/* Host Dashboard - Protected */}
+        {/* Host Dashboard */}
         <Route
           path="/host-dashboard/*"
           element={

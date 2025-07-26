@@ -1,14 +1,20 @@
 import { useEffect, useState } from "react";
 import axios from "axios";
 import { motion } from "framer-motion";
-import RegisterForm from "../components/RegisterForm";
 import toast, { Toaster } from "react-hot-toast";
 import Navbar from "../components/Navbar";
+
+// Utility function to get user object from localStorage
+const getUser = () => {
+  const stored = localStorage.getItem("user");
+  return stored ? JSON.parse(stored) : null;
+};
 
 const UpcomingWebinars = () => {
   const [webinars, setWebinars] = useState([]);
   const [loading, setLoading] = useState(true);
-  const [selectedWebinar, setSelectedWebinar] = useState(null);
+  const [showConfirm, setShowConfirm] = useState(null); // holds webinar ID to confirm
+  const [alertMessage, setAlertMessage] = useState(null); // for already registered or error
 
   useEffect(() => {
     const fetchWebinars = async () => {
@@ -29,6 +35,34 @@ const UpcomingWebinars = () => {
 
     fetchWebinars();
   }, []);
+
+  const confirmAndRegister = async (webinarId) => {
+    const user = getUser();
+
+    if (!user) {
+      toast.error("Please log in to register for a webinar.");
+      setShowConfirm(null);
+      return;
+    }
+
+    try {
+      const res = await axios.post(`http://localhost:5000/webinar/${webinarId}/register`, {
+        userId: user._id,
+      });
+
+      if (res.data.message === "Already registered for this webinar") {
+        setAlertMessage("You are already registered for this webinar.");
+      } else {
+        toast.success(res.data.message || "Registration successful!");
+      }
+    } catch (err) {
+      setAlertMessage(
+        err.response?.data?.message || "Registration failed. Try again."
+      );
+    } finally {
+      setShowConfirm(null);
+    }
+  };
 
   return (
     <div className="min-h-screen bg-gray-50">
@@ -69,7 +103,7 @@ const UpcomingWebinars = () => {
 
                 <button
                   className="mt-4 w-full bg-indigo-600 text-white py-2 rounded hover:bg-indigo-700 transition"
-                  onClick={() => setSelectedWebinar(webinar._id)}
+                  onClick={() => setShowConfirm(webinar._id)}
                 >
                   Register Now
                 </button>
@@ -79,14 +113,46 @@ const UpcomingWebinars = () => {
         )}
       </div>
 
-      {/* Registration Modal */}
-      {selectedWebinar && (
-        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
-          <div className="bg-white p-6 rounded-xl shadow-xl w-full max-w-md relative">
-            <RegisterForm
-              webinarId={selectedWebinar}
-              close={() => setSelectedWebinar(null)}
-            />
+      {/* Confirmation Modal */}
+      {showConfirm && (
+        <div className="fixed inset-0 bg-black bg-opacity-40 flex items-center justify-center z-50">
+          <div className="bg-white p-6 rounded-xl shadow-2xl w-[90%] max-w-md text-center">
+            <h2 className="text-xl font-semibold text-gray-800 mb-4">
+              Confirm Registration
+            </h2>
+            <p className="text-gray-600 mb-6">
+              Are you sure you want to register for this webinar?
+            </p>
+            <div className="flex justify-center gap-4">
+              <button
+                onClick={() => setShowConfirm(null)}
+                className="px-4 py-2 bg-gray-300 hover:bg-gray-400 rounded-lg transition"
+              >
+                Cancel
+              </button>
+              <button
+                onClick={() => confirmAndRegister(showConfirm)}
+                className="px-4 py-2 bg-indigo-600 text-white hover:bg-indigo-700 rounded-lg transition"
+              >
+                Confirm
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* Alert Modal */}
+      {alertMessage && (
+        <div className="fixed inset-0 bg-black bg-opacity-40 flex items-center justify-center z-50">
+          <div className="bg-white p-6 rounded-xl shadow-2xl w-[90%] max-w-md text-center">
+            <h2 className="text-xl font-semibold text-gray-800 mb-4">Notice</h2>
+            <p className="text-gray-600 mb-6">{alertMessage}</p>
+            <button
+              onClick={() => setAlertMessage(null)}
+              className="px-4 py-2 bg-indigo-600 text-white hover:bg-indigo-700 rounded-lg transition"
+            >
+              OK
+            </button>
           </div>
         </div>
       )}

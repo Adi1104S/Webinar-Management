@@ -14,6 +14,8 @@ const HostWebinars = () => {
     speakerEmail: "",
   });
 
+  const [emailInputs, setEmailInputs] = useState({}); // { [webinarId]: { subject, message } }
+
   const fetchHostedWebinars = async () => {
     try {
       const userData = localStorage.getItem("user");
@@ -75,8 +77,42 @@ const HostWebinars = () => {
     }
   };
 
-  if (loading)
+  const handleEmailInputChange = (webinarId, field, value) => {
+    setEmailInputs((prev) => ({
+      ...prev,
+      [webinarId]: {
+        ...prev[webinarId],
+        [field]: value,
+      },
+    }));
+  };
+
+  const handleSendEmail = async (webinarId) => {
+    const { subject, message } = emailInputs[webinarId] || {};
+
+    if (!subject || !message) {
+      toast.error("Subject and message are required.");
+      return;
+    }
+
+    try {
+      await axios.post("http://localhost:5000/webinar/sendMail", {
+        webinarId,
+        subject,
+        message,
+      });
+
+      toast.success("Email sent to registered users!");
+      setEmailInputs((prev) => ({ ...prev, [webinarId]: { subject: "", message: "" } }));
+    } catch (error) {
+      console.error(error);
+      toast.error("Failed to send email.");
+    }
+  };
+
+  if (loading) {
     return <div className="text-center mt-10">Loading webinars...</div>;
+  }
 
   return (
     <div className="max-w-5xl mx-auto mt-8 p-4 bg-white shadow rounded">
@@ -154,12 +190,46 @@ const HostWebinars = () => {
                   <p className="text-sm text-gray-500">
                     Speaker: {webinar.speaker.name} ({webinar.speaker.email})
                   </p>
-                  <button
-                    className="mt-4 inline-flex items-center gap-2 text-sm text-white bg-[#4200FF] hover:bg-[#3414cc] px-4 py-2 rounded-md transition duration-200"
-                    onClick={() => handleEdit(webinar)}
-                  >
-                    Edit Webinar
-                  </button>
+
+                  <div className="mt-4 flex flex-wrap gap-3">
+                    <button
+                      className="text-sm text-white bg-[#4200FF] hover:bg-[#3414cc] px-4 py-2 rounded-md transition duration-200"
+                      onClick={() => handleEdit(webinar)}
+                    >
+                      Edit Webinar
+                    </button>
+                  </div>
+
+                  {/* Email Form */}
+                  <div className="mt-4 border-t pt-4">
+                    <h4 className="font-semibold mb-2 text-lg text-gray-700">
+                      Send Email to Registered Users
+                    </h4>
+                    <input
+                      type="text"
+                      placeholder="Subject"
+                      value={emailInputs[webinar._id]?.subject || ""}
+                      onChange={(e) =>
+                        handleEmailInputChange(webinar._id, "subject", e.target.value)
+                      }
+                      className="w-full border p-2 rounded mb-2"
+                    />
+                    <textarea
+                      placeholder="Message"
+                      value={emailInputs[webinar._id]?.message || ""}
+                      onChange={(e) =>
+                        handleEmailInputChange(webinar._id, "message", e.target.value)
+                      }
+                      className="w-full border p-2 rounded mb-2"
+                      rows={4}
+                    />
+                    <button
+                      onClick={() => handleSendEmail(webinar._id)}
+                      className="bg-green-600 text-white px-4 py-2 rounded hover:bg-green-700"
+                    >
+                      Send Email
+                    </button>
+                  </div>
                 </>
               )}
             </li>

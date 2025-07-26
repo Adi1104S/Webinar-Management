@@ -1,6 +1,7 @@
 import express from "express";
 import Webinar from "../models/webinar.js";
 import User from "../models/user.js";
+import nodemailer from "nodemailer"
 
 const router = express.Router();
 // creating webinar
@@ -201,4 +202,33 @@ router.get('/', async (req, res) => {
   }
 });
 
+const sendMailToParticipants = async (req, res) => {
+
+  const { webinarId, subject, message } = req.body;
+
+  try {
+    const webinar = await Webinar.findById(webinarId).populate("attendees");
+    const emails = webinar.attendees.map(user => user.email);
+
+    const transporter = nodemailer.createTransport({
+      service: "gmail",
+      auth: {
+        user: process.env.EMAIL_USER,
+        pass: process.env.EMAIL_PASS
+      }
+    });
+
+    await transporter.sendMail({
+      from: process.env.EMAIL_USER,
+      to: emails,
+      subject,
+      html: `<p>${message}</p>`
+    });
+
+    res.status(200).json({ message: "Emails sent successfully!" });
+  } catch (error) {
+    res.status(500).json({ message: "Failed to send emails", error });
+  }
+};
+router.post("/sendMail", sendMailToParticipants);
 export default router;
